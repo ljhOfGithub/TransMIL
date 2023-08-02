@@ -37,28 +37,50 @@ class  ModelInterface(pl.LightningModule):
         
         #---->Metrics
         if self.n_classes > 2: 
-            self.AUROC = torchmetrics.AUROC(num_classes = self.n_classes, average = 'macro')
-            metrics = torchmetrics.MetricCollection([torchmetrics.Accuracy(num_classes = self.n_classes,
+            # self.AUROC = torchmetrics.AUROC(num_classes = self.n_classes, average = 'macro')
+            self.AUROC = torchmetrics.AUROC(task='binary',num_classes = self.n_classes, average = 'macro')
+            # metrics = torchmetrics.MetricCollection([torchmetrics.Accuracy(num_classes = self.n_classes,
+            #                                                                average='micro'),
+            #                                          torchmetrics.CohenKappa(num_classes = self.n_classes),
+            #                                          torchmetrics.F1(num_classes = self.n_classes,
+            #                                                          average = 'macro'),
+            #                                          torchmetrics.Recall(average = 'macro',
+            #                                                              num_classes = self.n_classes),
+            #                                          torchmetrics.Precision(average = 'macro',
+            #                                                                 num_classes = self.n_classes),
+            #                                          torchmetrics.Specificity(average = 'macro',
+            #                                                                 num_classes = self.n_classes)])
+            metrics = torchmetrics.MetricCollection([torchmetrics.Accuracy(task='binary',num_classes = self.n_classes,
                                                                            average='micro'),
-                                                     torchmetrics.CohenKappa(num_classes = self.n_classes),
-                                                     torchmetrics.F1(num_classes = self.n_classes,
+                                                     torchmetrics.CohenKappa(task='binary',num_classes = self.n_classes),
+                                                     torchmetrics.F1Score(task='binary',num_classes = self.n_classes,#https://blog.csdn.net/kaoyaxiangwol/article/details/124327680
                                                                      average = 'macro'),
-                                                     torchmetrics.Recall(average = 'macro',
+                                                     torchmetrics.Recall(task='binary',average = 'macro',
                                                                          num_classes = self.n_classes),
-                                                     torchmetrics.Precision(average = 'macro',
+                                                     torchmetrics.Precision(task='binary',average = 'macro',
                                                                             num_classes = self.n_classes),
-                                                     torchmetrics.Specificity(average = 'macro',
+                                                     torchmetrics.Specificity(task='binary',average = 'macro',
                                                                             num_classes = self.n_classes)])
         else : 
-            self.AUROC = torchmetrics.AUROC(num_classes=2, average = 'macro')
-            metrics = torchmetrics.MetricCollection([torchmetrics.Accuracy(num_classes = 2,
+            # self.AUROC = torchmetrics.AUROC(num_classes=2, average = 'macro')
+            self.AUROC = torchmetrics.AUROC(task='binary',num_classes=2, average = 'macro')
+            # metrics = torchmetrics.MetricCollection([torchmetrics.Accuracy(num_classes = 2,
+            #                                                                average = 'micro'),
+            #                                          torchmetrics.CohenKappa(num_classes = 2),
+            #                                          torchmetrics.F1(num_classes = 2,
+            #                                                          average = 'macro'),
+            #                                          torchmetrics.Recall(average = 'macro',
+            #                                                              num_classes = 2),
+            #                                          torchmetrics.Precision(average = 'macro',
+            #                                                                 num_classes = 2)])
+            metrics = torchmetrics.MetricCollection([torchmetrics.Accuracy(task='binary',num_classes = 2,
                                                                            average = 'micro'),
-                                                     torchmetrics.CohenKappa(num_classes = 2),
-                                                     torchmetrics.F1(num_classes = 2,
+                                                     torchmetrics.CohenKappa(task='binary',num_classes = 2),
+                                                     torchmetrics.F1Score(task='binary',num_classes = 2,
                                                                      average = 'macro'),
-                                                     torchmetrics.Recall(average = 'macro',
+                                                     torchmetrics.Recall(task='binary',average = 'macro',
                                                                          num_classes = 2),
-                                                     torchmetrics.Precision(average = 'macro',
+                                                     torchmetrics.Precision(task='binary',average = 'macro',
                                                                             num_classes = 2)])
         self.valid_metrics = metrics.clone(prefix = 'val_')
         self.test_metrics = metrics.clone(prefix = 'test_')
